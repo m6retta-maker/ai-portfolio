@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沈晓 — Visual Communication Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #F7F4EF;
+            --ink: #1C1C1C;
+            --muted: #7A7A7A;
+            --accent: #C84B31;
+            --border: #DDD9D3;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 48px;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--ink); }
+
+        /* HERO */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 80px;
+        }
+
+        .hero-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 80px 48px;
+            border-right: 1px solid var(--border);
+        }
+
+        .hero-tag {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        .hero-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(56px, 7vw, 96px);
+            line-height: 1.0;
+            letter-spacing: -0.03em;
+            margin-bottom: 8px;
+        }
+
+        .hero-name-en {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(28px, 3.5vw, 48px);
+            color: var(--muted);
+            margin-bottom: 40px;
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--muted);
+            max-width: 380px;
+            margin-bottom: 48px;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--ink);
+            color: var(--bg);
+            padding: 14px 28px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: background 0.2s;
+            width: fit-content;
+        }
+
+        .hero-cta:hover { background: var(--accent); }
+
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-visual {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #E8E3DA 0%, #D4CFC6 40%, #BFB9AF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-visual-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 240px;
+            color: rgba(28,28,28,0.07);
+            letter-spacing: -0.05em;
+            user-select: none;
+        }
+
+        .hero-stats {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-end;
+        }
+
+        .stat { text-align: right; }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        /* ABOUT */
+        #about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border);
+        }
+
+        .about-left {
+            padding: 80px 48px;
+            border-right: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 40px;
+        }
+
+        .about-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 3vw, 48px);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 32px;
+        }
+
+        .about-body {
+            font-size: 15px;
+            line-height: 1.9;
+            color: var(--muted);
+        }
+
+        .about-body p + p { margin-top: 20px; }
+
+        .about-right { padding: 80px 48px; }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 24px;
+            padding: 28px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .timeline-year {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 500;
+            padding-top: 3px;
+        }
+
+        .timeline-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-content p {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        /* WORKS */
+        #works {
+            border-top: 1px solid var(--border);
+            padding: 80px 48px;
+        }
+
+        .works-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+        }
+
+        .works-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 3vw, 48px);
+            letter-spacing: -0.02em;
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+        }
+
+        .work-card {
+            aspect-ratio: 4/3;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .work-card:nth-child(1) { background: #2C2C2C; }
+        .work-card:nth-child(2) { background: #C84B31; }
+        .work-card:nth-child(3) { background: #8B9E8A; }
+        .work-card:nth-child(4) { background: #4A4A4A; }
+
+        .work-card-label {
+            position: absolute;
+            top: 32px;
+            left: 32px;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+            z-index: 2;
+        }
+
+        .work-card-visual {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .work-visual-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 80px;
+            color: rgba(255,255,255,0.1);
+            letter-spacing: -0.05em;
+        }
+
+        .work-card-inner {
+            position: absolute;
+            inset: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 3;
+        }
+
+        .work-card:hover .work-card-inner { opacity: 1; }
+
+        .work-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .work-card-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* CHAT */
+        #chat {
+            border-top: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .chat-left {
+            padding: 80px 48px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .chat-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(32px, 3vw, 48px);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        .chat-subtitle {
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sq-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 12px 20px;
+            text-align: left;
+            font-size: 13px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sq-btn:hover {
+            border-color: var(--ink);
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        .chat-right {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-height: 360px;
+            max-height: 480px;
+            padding-right: 8px;
+            margin-bottom: 24px;
+        }
+
+        .message {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .message.user { flex-direction: row-reverse; }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--bg);
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+
+        .message.user .message-avatar { background: var(--accent); }
+
+        .message-bubble {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 14px 18px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--ink);
+            max-width: 80%;
+        }
+
+        .message.user .message-bubble {
+            background: var(--ink);
+            color: var(--bg);
+            border-color: var(--ink);
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--border);
+            background: white;
+            padding: 14px 18px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus { border-color: var(--ink); }
+
+        .chat-send {
+            background: var(--ink);
+            color: var(--bg);
+            border: none;
+            padding: 14px 24px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .chat-send:hover { background: var(--accent); }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--ink); }
+
+        .footer-right {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-track { background: transparent; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--border); }
+
+        @media (max-width: 768px) {
+            nav { padding: 16px 24px; }
+            .nav-links { display: none; }
+            #hero, #about, #chat { grid-template-columns: 1fr; }
+            .hero-left, .about-left, .chat-left {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .hero-right { min-height: 280px; }
+            .hero-left, .about-left, .about-right,
+            .chat-left, .chat-right { padding: 48px 24px; }
+            #works { padding: 48px 24px; }
+            .works-grid { grid-template-columns: 1fr; }
+            footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-logo">沈晓</div>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#chat">Talk to me</a></li>
+    </ul>
+</nav>
+
+<section id="hero">
+    <div class="hero-left">
+        <div class="hero-tag">Visual Communication Designer · 视觉传达</div>
+        <h1 class="hero-name">沈晓</h1>
+        <div class="hero-name-en">Shen Xiao</div>
+        <p class="hero-desc">UAL 伦敦艺术大学毕业，视觉传播方向。现居上海，在两种设计语言之间找到自己的语法。</p>
+        <a href="#chat" class="hero-cta">
+            <span>和我聊聊</span>
+            <span>→</span>
+        </a>
+    </div>
+    <div class="hero-right">
+        <div class="hero-visual">
+            <div class="hero-visual-text">沈</div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-num">4</div>
+                <div class="stat-label">Selected Works</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">2</div>
+                <div class="stat-label">Years in London</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="about-left">
+        <div class="section-label">About</div>
+        <h2 class="about-title">我在两种<br><em>设计语言</em><br>之间。</h2>
+        <div class="about-body">
+            <p>在伦敦读书那两年，我习惯了用留白和层次说话——一张页面不需要填满，空间本身就是内容。</p>
+            <p>回到上海之后，我发现这套语法需要翻译。国内的用户更快、更直接，他们不会在空白里停留。这个落差让我焦虑过，但现在我觉得这是我最有价值的地方：我能读懂两边。</p>
+            <p>我现在在找第一份全职工作。不是因为没有方向，而是因为我想找到一个真正需要这种双重视角的地方。</p>
+        </div>
+    </div>
+    <div class="about-right">
+        <div class="section-label">Timeline</div>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-content">
+                    <h4>回到上海，开始求职</h4>
+                    <p>自由接单同时，寻找能发挥跨文化设计能力的全职机会</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2024–25</div>
+                <div class="timeline-content">
+                    <h4>UAL 伦敦艺术大学</h4>
+                    <p>MA Visual Communication，毕业论文探讨中英字体系统的视觉冲突与融合</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2024</div>
+                <div class="timeline-content">
+                    <h4>Pause Café，伦敦</h4>
+                    <p>独立咖啡品牌视觉识别系统全案，从 logo 到空间导视落地</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020–24</div>
+                <div class="timeline-content">
+                    <h4>上海某 985 大学，视觉传达本科</h4>
+                    <p>系里年级前 5%，获全国大学生广告艺术大赛银奖</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="works">
+    <div class="works-header">
+        <h2 class="works-title">Selected Works</h2>
+        <div class="section-label">2023 — 2026</div>
+    </div>
+    <div class="works-grid">
+        <div class="work-card">
+            <div class="work-card-label">Editorial · Type</div>
+            <div class="work-card-visual">
+                <div class="work-visual-text">Re:型</div>
+            </div>
+            <div class="work-card-inner">
+                <div class="work-card-title">Re:型</div>
+                <div class="work-card-desc">双语字体标本杂志，毕业论文项目 — 2025</div>
+            </div>
+        </div>
+        <div class="work-card">
+            <div class="work-card-label">Brand Identity</div>
+            <div class="work-card-visual">
+                <div class="work-visual-text">Pause</div>
+            </div>
+            <div class="work-card-inner">
+                <div class="work-card-title">Pause Café</div>
+                <div class="work-card-desc">伦敦独立咖啡品牌全案视觉 — 2024</div>
+            </div>
+        </div>
+        <div class="work-card">
+            <div class="work-card-label">Motion · Identity</div>
+            <div class="work-card-visual">
+                <div class="work-visual-text">新旧</div>
+            </div>
+            <div class="work-card-inner">
+                <div class="work-card-title">新旧之间</div>
+                <div class="work-card-desc">上海文化机构动态视觉识别 — 2025</div>
+            </div>
+        </div>
+        <div class="work-card">
+            <div class="work-card-label">Editorial · Photography</div>
+            <div class="work-card-visual">
+                <div class="work-visual-text">Grey</div>
+            </div>
+            <div class="work-card-inner">
+                <div class="work-card-title">Grey Area</div>
+                <div class="work-card-desc">关于文化夹缝身份的摄影编辑项目 — 2023</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="chat">
+    <div class="chat-left">
+        <div class="section-label">Ask Me</div>
+        <h2 class="chat-title">有什么想<br>直接问我的？</h2>
+        <p class="chat-subtitle">不用客气。招聘官、设计师、或者只是路过的人都可以问。我会认真回答。</p>
+        <div class="suggested-questions">
+            <button class="sq-btn" onclick="askQuestion('你在找什么样的工作？')">你在找什么样的工作？</button>
+            <button class="sq-btn" onclick="askQuestion('你在英国学到了什么？')">你在英国学到了什么？</button>
+            <button class="sq-btn" onclick="askQuestion('回国之后最大的挑战是什么？')">回国之后最大的挑战是什么？</button>
+            <button class="sq-btn" onclick="askQuestion('你会用 AI 工具吗？')">你会用 AI 工具吗？</button>
+        </div>
+    </div>
+    <div class="chat-right">
+        <div class="chat-messages" id="chatMessages">
+            <div class="message">
+                <div class="message-avatar">晓</div>
+                <div class="message-bubble">你好，我是沈晓。可以问我任何关于我的作品、经历或者求职方向的问题——左边有几个快捷问题，或者直接打字也行。</div>
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="输入你的问题..." onkeypress="handleKey(event)">
+            <button class="chat-send" onclick="sendMessage()">发送</button>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-left">沈晓 · Shen Xiao</div>
+    <div class="footer-links">
+        <a href="mailto:shenxiao@design.com">Email</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+    </div>
+    <div class="footer-right">Shanghai · 2026</div>
+</footer>
+
+<script>
+    const responses = [
+        {
+            keywords: ['工作', '找', '求职', '岗位', '方向', '职位', '应聘', '机会'],
+            answer: '我在找品牌视觉或创意内容方向的全职。说实话，我不太适合纯执行型的岗位——我需要能参与策略讨论的位置，因为我的训练方式就是从"为什么"出发的。外企或者有国际业务的本土公司都可以，但最重要的是团队有真正重视设计判断力的人。'
+        },
+        {
+            keywords: ['英国', '伦敦', '留学', '国外', 'UAL', '海外'],
+            answer: '在伦敦最大的收获不是技能，是一套思维方式。UAL 的训练非常强调"为什么这样设计"——每个决定都要能说清楚依据。两年下来，我养成了一个习惯：设计之前先写一页文字，把逻辑捋清楚。这个习惯在国内面试里有时候显得"太慢"，但我觉得是对的。'
+        },
+        {
+            keywords: ['挑战', '困难', '回国', '水土', '适应', '国内'],
+            answer: '最难的不是技术，是叙事方式的切换。我的作品集做法很"英式"——大量概念说明、过程文档、英文写的 rationale。回来面试，HR 翻了两分钟说"能不能直接给我看成品图"。这让我意识到：作品本身没问题，是我在用错误的语言讲故事。现在我在重做作品集，两个版本：一个给国际品牌，一个给国内团队。'
+        },
+        {
+            keywords: ['AI', 'ai', '人工智能', '工具', 'Midjourney', 'Figma', '技能', '软件'],
+            answer: '用，而且是主动在学。我用 Midjourney 和 Stable Diffusion 做概念草图，用 Figma 做交互原型，After Effects 做动态。但我不认为 AI 会替代有判断力的设计师——它能生成，但不能决定什么值得生成。这个判断力才是我花了六年训练的东西。'
+        },
+        {
+            keywords: ['作品', '项目', '案例', '设计', 'portfolio', '作品集'],
+            answer: '我现在展示的四个项目各自代表一个方向：Re:型 是字体研究和出版设计的交叉，最学术；Pause Café 是纯商业落地项目，从策略到执行一个人完成；新旧之间 是第一次做动态视觉；Grey Area 是最私人的，用摄影和编辑处理"在哪里都是外人"这个感受。'
+        },
+        {
+            keywords: ['联系', '邮件', '合作', '招聘', '简历', 'email', '怎么找'],
+            answer: '可以发邮件给我，地址在页面底部。如果你是招聘方，我可以发完整版作品集 PDF——比网页版更详细，有完整的过程说明。如果只是想聊设计，也欢迎，我对有质量的对话比对"机会"更感兴趣。'
+        }
+    ];
+
+    function getResponse(input) {
+        const text = input.toLowerCase();
+        for (const r of responses) {
+            if (r.keywords.some(k => text.includes(k.toLowerCase()))) {
+                return r.answer;
+            }
+        }
+        return '这个问题我需要想一下……你能说得更具体一点吗？比如你是在问我的经历、作品，还是求职方向？';
+    }
+
+    function addMessage(text, isUser) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'message' + (isUser ? ' user' : '');
+        div.innerHTML = `
+            <div class="message-avatar">${isUser ? '你' : '晓'}</div>
+            <div class="message-bubble">${text}</div>
+        `;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+        addMessage(text, true);
+        input.value = '';
+        setTimeout(() => addMessage(getResponse(text), false), 600);
+    }
+
+    function askQuestion(q) {
+        addMessage(q, true);
+        setTimeout(() => addMessage(getResponse(q), false), 600);
+    }
+
+    function handleKey(e) {
+        if (e.key === 'Enter') sendMessage();
+    }
+</script>
+
+</body>
+</html>

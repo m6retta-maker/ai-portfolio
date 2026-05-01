@@ -1,781 +1,1496 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>沈晓 — Visual Communication Designer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --bg: #F7F4EF;
-            --ink: #1C1C1C;
-            --muted: #7A7A7A;
-            --accent: #C84B31;
-            --border: #DDD9D3;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            background: var(--bg);
-            color: var(--ink);
-            font-family: 'Inter', sans-serif;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-
-        /* NAV */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 48px;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            letter-spacing: -0.02em;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: var(--ink); }
-
-        /* HERO */
-        #hero {
-            min-height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            padding-top: 80px;
-        }
-
-        .hero-left {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 80px 48px;
-            border-right: 1px solid var(--border);
-        }
-
-        .hero-tag {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 24px;
-        }
-
-        .hero-name {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(56px, 7vw, 96px);
-            line-height: 1.0;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-        }
-
-        .hero-name-en {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: clamp(28px, 3.5vw, 48px);
-            color: var(--muted);
-            margin-bottom: 40px;
-        }
-
-        .hero-desc {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--muted);
-            max-width: 380px;
-            margin-bottom: 48px;
-        }
-
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--ink);
-            color: var(--bg);
-            padding: 14px 28px;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            text-decoration: none;
-            transition: background 0.2s;
-            width: fit-content;
-        }
-
-        .hero-cta:hover { background: var(--accent); }
-
-        .hero-right {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero-visual {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #E8E3DA 0%, #D4CFC6 40%, #BFB9AF 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-visual-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 240px;
-            color: rgba(28,28,28,0.07);
-            letter-spacing: -0.05em;
-            user-select: none;
-        }
-
-        .hero-stats {
-            position: absolute;
-            bottom: 40px;
-            right: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            align-items: flex-end;
-        }
-
-        .stat { text-align: right; }
-
-        .stat-num {
-            font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            line-height: 1;
-        }
-
-        .stat-label {
-            font-size: 11px;
-            color: var(--muted);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        /* ABOUT */
-        #about {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-top: 1px solid var(--border);
-        }
-
-        .about-left {
-            padding: 80px 48px;
-            border-right: 1px solid var(--border);
-        }
-
-        .section-label {
-            font-size: 11px;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 40px;
-        }
-
-        .about-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 3vw, 48px);
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: 32px;
-        }
-
-        .about-body {
-            font-size: 15px;
-            line-height: 1.9;
-            color: var(--muted);
-        }
-
-        .about-body p + p { margin-top: 20px; }
-
-        .about-right { padding: 80px 48px; }
-
-        .timeline {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .timeline-item {
-            display: grid;
-            grid-template-columns: 80px 1fr;
-            gap: 24px;
-            padding: 28px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .timeline-year {
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 500;
-            padding-top: 3px;
-        }
-
-        .timeline-content h4 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timeline-content p {
-            font-size: 13px;
-            color: var(--muted);
-            line-height: 1.5;
-        }
-
-        /* WORKS */
-        #works {
-            border-top: 1px solid var(--border);
-            padding: 80px 48px;
-        }
-
-        .works-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 60px;
-        }
-
-        .works-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 3vw, 48px);
-            letter-spacing: -0.02em;
-        }
-
-        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-        }
-
-        .work-card {
-            aspect-ratio: 4/3;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .work-card:nth-child(1) { background: #2C2C2C; }
-        .work-card:nth-child(2) { background: #C84B31; }
-        .work-card:nth-child(3) { background: #8B9E8A; }
-        .work-card:nth-child(4) { background: #4A4A4A; }
-
-        .work-card-label {
-            position: absolute;
-            top: 32px;
-            left: 32px;
-            font-size: 11px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.45);
-            z-index: 2;
-        }
-
-        .work-card-visual {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .work-visual-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 80px;
-            color: rgba(255,255,255,0.1);
-            letter-spacing: -0.05em;
-        }
-
-        .work-card-inner {
-            position: absolute;
-            inset: 0;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 3;
-        }
-
-        .work-card:hover .work-card-inner { opacity: 1; }
-
-        .work-card-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
-            color: white;
-            margin-bottom: 8px;
-        }
-
-        .work-card-desc {
-            font-size: 13px;
-            color: rgba(255,255,255,0.7);
-        }
-
-        /* CHAT */
-        #chat {
-            border-top: 1px solid var(--border);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-
-        .chat-left {
-            padding: 80px 48px;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .chat-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(32px, 3vw, 48px);
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: 24px;
-        }
-
-        .chat-subtitle {
-            font-size: 15px;
-            color: var(--muted);
-            line-height: 1.8;
-            margin-bottom: 40px;
-        }
-
-        .suggested-questions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .sq-btn {
-            background: none;
-            border: 1px solid var(--border);
-            padding: 12px 20px;
-            text-align: left;
-            font-size: 13px;
-            color: var(--muted);
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .sq-btn:hover {
-            border-color: var(--ink);
-            background: var(--ink);
-            color: var(--bg);
-        }
-
-        .chat-right {
-            padding: 48px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-height: 360px;
-            max-height: 480px;
-            padding-right: 8px;
-            margin-bottom: 24px;
-        }
-
-        .message {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .message.user { flex-direction: row-reverse; }
-
-        .message-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--ink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: var(--bg);
-            flex-shrink: 0;
-            font-weight: 600;
-        }
-
-        .message.user .message-avatar { background: var(--accent); }
-
-        .message-bubble {
-            background: white;
-            border: 1px solid var(--border);
-            padding: 14px 18px;
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--ink);
-            max-width: 80%;
-        }
-
-        .message.user .message-bubble {
-            background: var(--ink);
-            color: var(--bg);
-            border-color: var(--ink);
-        }
-
-        .chat-input-area {
-            display: flex;
-            gap: 12px;
-        }
-
-        .chat-input {
-            flex: 1;
-            border: 1px solid var(--border);
-            background: white;
-            padding: 14px 18px;
-            font-size: 14px;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .chat-input:focus { border-color: var(--ink); }
-
-        .chat-send {
-            background: var(--ink);
-            color: var(--bg);
-            border: none;
-            padding: 14px 24px;
-            font-size: 13px;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.2s;
-        }
-
-        .chat-send:hover { background: var(--accent); }
-
-        /* FOOTER */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 40px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-left {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-links a {
-            font-size: 13px;
-            color: var(--muted);
-            text-decoration: none;
-            letter-spacing: 0.05em;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover { color: var(--ink); }
-
-        .footer-right {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .chat-messages::-webkit-scrollbar { width: 4px; }
-        .chat-messages::-webkit-scrollbar-track { background: transparent; }
-        .chat-messages::-webkit-scrollbar-thumb { background: var(--border); }
-
-        @media (max-width: 768px) {
-            nav { padding: 16px 24px; }
-            .nav-links { display: none; }
-            #hero, #about, #chat { grid-template-columns: 1fr; }
-            .hero-left, .about-left, .chat-left {
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
-            .hero-right { min-height: 280px; }
-            .hero-left, .about-left, .about-right,
-            .chat-left, .chat-right { padding: 48px 24px; }
-            #works { padding: 48px 24px; }
-            .works-grid { grid-template-columns: 1fr; }
-            footer { padding: 32px 24px; flex-direction: column; gap: 20px; text-align: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沈晓 SHEN XIAO — Digital Director · 数字导演</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0E0B1A;
+  --bg-2: #16112A;
+  --bg-3: #221A3D;
+  --ink: #EDE7DA;
+  --ink-dim: rgba(237, 231, 218, 0.55);
+  --ink-faint: rgba(237, 231, 218, 0.25);
+  --accent: #F4B23C;
+  --accent-soft: rgba(244, 178, 60, 0.15);
+  --meta: #3DD9D6;
+  --border: rgba(237, 231, 218, 0.08);
+  --border-strong: rgba(237, 231, 218, 0.18);
+  --paper: #ECE3CE;
+  --paper-ink: #2A241A;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Inter', 'Noto Serif SC', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* film grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+img { max-width: 100%; display: block; }
+
+/* ============ NAV ============ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 48px;
+  backdrop-filter: blur(14px);
+  background: rgba(14, 11, 26, 0.7);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.nav-logo .tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--meta);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--accent); }
+
+/* ============ HERO ============ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  padding: 110px 48px 60px;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 20%, rgba(125, 91, 255, 0.16), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 20% 90%, rgba(244, 178, 60, 0.08), transparent 55%);
+  overflow: hidden;
+}
+
+.hero-meta-top, .hero-meta-bottom {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-meta-top {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.hero-stack {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 40px 0;
+  min-height: 50vh;
+}
+
+.hero-line {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  font-size: clamp(96px, 19vw, 280px);
+  line-height: 0.86;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 3;
+}
+
+.hero-line.solid { color: var(--ink); }
+
+.hero-line.outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+  text-align: right;
+  margin-top: -0.08em;
+  z-index: 2;
+}
+
+.hero-portrait {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  width: clamp(260px, 32vw, 480px);
+  aspect-ratio: 3/4;
+  z-index: 2;
+  background:
+    linear-gradient(180deg, rgba(244, 178, 60, 0.04), rgba(125, 91, 255, 0.08)),
+    var(--bg-2);
+  border: 1px solid var(--border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.hero-cn-name {
+  position: absolute;
+  bottom: -0.05em;
+  left: 0;
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(60px, 9vw, 140px);
+  font-weight: 500;
+  color: var(--accent);
+  z-index: 4;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.hero-meta-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 32px;
+  align-items: end;
+  margin-top: 24px;
+}
+
+.hero-tagline {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: center;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+.hero-meta-bottom .right { text-align: right; }
+
+/* ============ Placeholder ============ */
+.ph {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(45deg,
+      transparent 0 12px,
+      rgba(237,231,218,0.015) 12px 13px),
+    linear-gradient(135deg, var(--bg-2), var(--bg-3));
+  border: 1px dashed var(--border-strong);
+  text-align: center;
+}
+
+.ph-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  padding: 0 20px;
+}
+
+.ph-text .id {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.ph.paper {
+  background:
+    repeating-linear-gradient(45deg,
+      transparent 0 12px,
+      rgba(42,36,26,0.04) 12px 13px),
+    var(--paper);
+  border: 1px dashed rgba(42,36,26,0.25);
+}
+
+.ph.paper .ph-text { color: rgba(42,36,26,0.6); }
+.ph.paper .ph-text .id { color: #8B5E1A; }
+
+/* ============ Section header ============ */
+.section-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 48px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: clamp(36px, 5vw, 72px);
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.section-title em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+/* ============ ABOUT (DIRECTOR PROFILE) ============ */
+#about {
+  padding: 120px 48px;
+  border-top: 1px solid var(--border);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 96px;
+  margin-top: 64px;
+}
+
+.about-portrait {
+  aspect-ratio: 3/4;
+  position: relative;
+}
+
+.portrait-meta {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.about-content .work-title-en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.about-content h3 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(40px, 4.4vw, 64px);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  margin-bottom: 36px;
+  color: var(--ink);
+}
+
+.about-content h3 em {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.about-bio p {
+  font-size: 15px;
+  line-height: 1.95;
+  color: var(--ink-dim);
+  margin-bottom: 18px;
+  max-width: 600px;
+}
+
+.about-bio .pull {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink);
+  border-left: 2px solid var(--accent);
+  padding-left: 18px;
+  margin-top: 28px;
+}
+
+.about-stats {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+  max-width: 600px;
+}
+
+.stat-block .num {
+  font-family: 'Fraunces', serif;
+  font-size: 36px;
+  color: var(--accent);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.stat-block .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.about-skills {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 600px;
+}
+
+.skill-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 7px 14px;
+  border: 1px solid var(--border-strong);
+  color: var(--ink-dim);
+}
+
+.skill-tag.primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ============ WORKS ============ */
+#works {
+  border-top: 1px solid var(--border);
+}
+
+.works-intro {
+  padding: 120px 48px 24px;
+}
+
+.works-intro-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.work {
+  position: relative;
+  padding: 96px 48px 96px;
+  border-top: 1px solid var(--border);
+}
+
+.work-slate {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 36px;
+}
+
+.work-slate .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.work-slate .sep { color: var(--ink-faint); }
+
+.work-hero {
+  width: 100%;
+  aspect-ratio: 21/9;
+  margin-bottom: 56px;
+  position: relative;
+}
+
+.work-titles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 64px;
+  align-items: end;
+}
+
+.work-title-cn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(56px, 7vw, 104px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+}
+
+.work-title-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.work-logline {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  font-weight: 400;
+  max-width: 480px;
+}
+
+.work-content {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 64px;
+  margin-bottom: 64px;
+}
+
+.directors-note .note-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--meta);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.directors-note p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink-dim);
+}
+
+.directors-note p + p { margin-top: 14px; }
+
+.directors-note .en {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--ink-faint);
+  font-size: 13px;
+  margin-top: 20px !important;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---- Stills grid ---- */
+.stills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stills-grid.three { grid-template-columns: repeat(3, 1fr); }
+
+.still {
+  aspect-ratio: 16/9;
+  position: relative;
+}
+
+.still .tc {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  background: rgba(14,11,26,0.7);
+  padding: 4px 8px;
+  z-index: 2;
+}
+
+/* ---- Character cards ---- */
+.subsection-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin: 72px 0 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.subsection-label .title {
+  color: var(--ink);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 24px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+}
+
+.char-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.char-grid.two { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
+
+.char-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+}
+
+.char-image {
+  aspect-ratio: 3/4;
+  position: relative;
+}
+
+.char-info {
+  padding: 22px 22px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.char-name {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.char-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.char-desc {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+}
+
+.char-palette {
+  display: flex;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.swatch {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-strong);
+}
+
+/* ---- Storyboard strip ---- */
+.storyboard-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.storyboard-frame {
+  background: var(--paper);
+  border: 1px solid rgba(42,36,26,0.15);
+}
+
+.storyboard-frame .frame-img {
+  aspect-ratio: 4/3;
+  position: relative;
+}
+
+.storyboard-frame .frame-meta {
+  padding: 10px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--paper-ink);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(42,36,26,0.12);
+}
+
+/* ---- Project 02: Screenplay ---- */
+.script-block {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 80px;
+  margin-bottom: 64px;
+  align-items: start;
+}
+
+.script-poster {
+  aspect-ratio: 2/3;
+}
+
+.script-synopsis h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--meta);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.script-synopsis p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--ink-dim);
+  margin-bottom: 16px;
+}
+
+.script-synopsis .lead {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+
+.awards-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding: 36px 32px;
+  border: 1px solid var(--accent);
+  background: var(--accent-soft);
+  margin: 56px 0;
+}
+
+.award {
+  text-align: center;
+}
+
+.award-laurel {
+  font-family: 'Fraunces', serif;
+  font-size: 36px;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.award-laurel::before, .award-laurel::after {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.award-name {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.award-detail {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.script-page {
+  background: var(--paper);
+  color: var(--paper-ink);
+  padding: 64px clamp(48px, 8vw, 100px);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 760px;
+  margin: 56px auto 0;
+  position: relative;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+}
+
+.script-page .page-num {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+.script-page .scene {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  letter-spacing: 0.02em;
+}
+
+.script-page .action {
+  margin-bottom: 18px;
+}
+
+.script-page .character {
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.script-page .paren {
+  text-align: center;
+  font-style: italic;
+  margin-bottom: 2px;
+  color: rgba(42,36,26,0.7);
+}
+
+.script-page .dialogue {
+  text-align: center;
+  margin-bottom: 18px;
+  padding: 0 60px;
+}
+
+.script-page .transition {
+  text-align: right;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 24px;
+}
+
+/* ---- Compact (Project 04) ---- */
+.work-compact .work-hero { aspect-ratio: 16/9; }
+.work-compact .stills-grid { grid-template-columns: repeat(3, 1fr); }
+.work-compact .work-title-cn { font-size: clamp(40px, 5vw, 72px); }
+
+/* ---- Credits ---- */
+.credits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  padding-top: 40px;
+  margin-top: 64px;
+  border-top: 1px solid var(--border);
+}
+
+.credit-block {
+  font-size: 12px;
+}
+
+.credit-label {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--meta);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10px;
+  margin-bottom: 10px;
+}
+
+.credit-value {
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+/* ============ CONTACT ============ */
+#contact {
+  padding: 160px 48px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%, rgba(244, 178, 60, 0.08), transparent 60%);
+}
+
+.contact-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--meta);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+
+.contact-cn {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(48px, 6.5vw, 96px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.contact-cn em {
+  color: var(--accent);
+  font-style: italic;
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+}
+
+.contact-en {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink-dim);
+  margin-bottom: 56px;
+}
+
+.contact-email {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 6px;
+  transition: opacity 0.2s;
+}
+
+.contact-email:hover { opacity: 0.7; }
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 32px 48px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.footer-links { display: flex; gap: 24px; }
+
+.footer-links a {
+  color: var(--ink-dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--accent); }
+
+/* ============ Reveal animation ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 56px; }
+  .about-portrait { max-width: 380px; }
+  .work-content { grid-template-columns: 1fr; gap: 40px; }
+  .script-block { grid-template-columns: 1fr; gap: 40px; }
+  .script-poster { max-width: 380px; }
+  .storyboard-strip { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 14px 22px; }
+  .nav-links { display: none; }
+  #hero, #about, .work, .works-intro, #contact, footer { padding-left: 22px; padding-right: 22px; }
+  #hero { padding-top: 100px; }
+  .hero-line { font-size: 22vw; }
+  .hero-cn-name { font-size: 18vw; left: 0; }
+  .hero-meta-bottom { grid-template-columns: 1fr; gap: 20px; text-align: left; }
+  .hero-meta-bottom .right, .hero-tagline { text-align: left; }
+  .work-titles { grid-template-columns: 1fr; gap: 16px; }
+  .stills-grid, .stills-grid.three { grid-template-columns: 1fr; }
+  .char-grid, .char-grid.two { grid-template-columns: 1fr; }
+  .credits { grid-template-columns: 1fr 1fr; }
+  .about-stats { grid-template-columns: 1fr 1fr; }
+  .awards-strip { grid-template-columns: 1fr; gap: 24px; }
+  .storyboard-strip { grid-template-columns: 1fr 1fr; }
+  .script-page { padding: 32px 24px; font-size: 11px; }
+  .script-page .dialogue { padding: 0 16px; }
+}
+</style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-logo">沈晓</div>
-    <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#works">Works</a></li>
-        <li><a href="#chat">Talk to me</a></li>
-    </ul>
+  <div class="nav-logo">沈晓<span class="tag">SHEN XIAO</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
 </nav>
 
+<!-- ============ HERO ============ -->
 <section id="hero">
-    <div class="hero-left">
-        <div class="hero-tag">Visual Communication Designer · 视觉传达</div>
-        <h1 class="hero-name">沈晓</h1>
-        <div class="hero-name-en">Shen Xiao</div>
-        <p class="hero-desc">UAL 伦敦艺术大学毕业，视觉传播方向。现居上海，在两种设计语言之间找到自己的语法。</p>
-        <a href="#chat" class="hero-cta">
-            <span>和我聊聊</span>
-            <span>→</span>
-        </a>
-    </div>
-    <div class="hero-right">
-        <div class="hero-visual">
-            <div class="hero-visual-text">沈</div>
+  <div class="hero-meta-top">
+    <span>● PORTFOLIO / 2026</span>
+    <span>DIRECTOR'S REEL — SELECTED WORKS</span>
+  </div>
+
+  <div class="hero-stack">
+    <div class="hero-line solid">SHEN</div>
+    <div class="hero-portrait">
+      <div class="ph">
+        <div class="ph-text">
+          <span class="id">[ IMG #01 ]</span><br>
+          HERO PORTRAIT<br>
+          3 : 4
         </div>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-num">4</div>
-                <div class="stat-label">Selected Works</div>
-            </div>
-            <div class="stat">
-                <div class="stat-num">2</div>
-                <div class="stat-label">Years in London</div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="hero-line outline">XIAO</div>
+    <div class="hero-cn-name">沈晓</div>
+  </div>
+
+  <div class="hero-meta-bottom">
+    <div>
+      DIGITAL DIRECTOR<br>
+      <span style="color: var(--ink);">数字导演 · AI SCI-FI</span>
+    </div>
+    <div class="hero-tagline">
+      "在两种语言之间，<br>讲一个还没人讲过的故事。"
+    </div>
+    <div class="right">
+      LONDON ↔ SHANGHAI<br>
+      <span style="color: var(--ink);">MA · UAL · 2025</span>
+    </div>
+  </div>
 </section>
 
+<!-- ============ ABOUT (DIRECTOR PROFILE) ============ -->
 <section id="about">
-    <div class="about-left">
-        <div class="section-label">About</div>
-        <h2 class="about-title">我在两种<br><em>设计语言</em><br>之间。</h2>
-        <div class="about-body">
-            <p>在伦敦读书那两年，我习惯了用留白和层次说话——一张页面不需要填满，空间本身就是内容。</p>
-            <p>回到上海之后，我发现这套语法需要翻译。国内的用户更快、更直接，他们不会在空白里停留。这个落差让我焦虑过，但现在我觉得这是我最有价值的地方：我能读懂两边。</p>
-            <p>我现在在找第一份全职工作。不是因为没有方向，而是因为我想找到一个真正需要这种双重视角的地方。</p>
+  <div class="section-meta">
+    <span>01 — DIRECTOR / 导演简介</span>
+    <span>SHANGHAI · 2026</span>
+  </div>
+
+  <h2 class="section-title">从伦敦回来的<em> 第一年。</em></h2>
+
+  <div class="about-grid">
+    <div class="about-portrait">
+      <div class="ph">
+        <div class="ph-text">
+          <span class="id">[ IMG #02 ]</span><br>
+          DIRECTOR PORTRAIT<br>
+          3 : 4
         </div>
+      </div>
+      <div class="portrait-meta">
+        <span>SHEN, X.</span>
+        <span>EST. 2002</span>
+      </div>
     </div>
-    <div class="about-right">
-        <div class="section-label">Timeline</div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-year">2026</div>
-                <div class="timeline-content">
-                    <h4>回到上海，开始求职</h4>
-                    <p>自由接单同时，寻找能发挥跨文化设计能力的全职机会</p>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2024–25</div>
-                <div class="timeline-content">
-                    <h4>UAL 伦敦艺术大学</h4>
-                    <p>MA Visual Communication，毕业论文探讨中英字体系统的视觉冲突与融合</p>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2024</div>
-                <div class="timeline-content">
-                    <h4>Pause Café，伦敦</h4>
-                    <p>独立咖啡品牌视觉识别系统全案，从 logo 到空间导视落地</p>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2020–24</div>
-                <div class="timeline-content">
-                    <h4>上海某 985 大学，视觉传达本科</h4>
-                    <p>系里年级前 5%，获全国大学生广告艺术大赛银奖</p>
-                </div>
-            </div>
+
+    <div class="about-content">
+      <div class="work-title-en">A Returning Voice · 海归导演</div>
+
+      <div class="about-bio">
+        <p>沈晓，24 岁，伦敦艺术大学（UAL）数字导演 MA 毕业。回上海六个月，仍在把伦敦的语法翻译成黄浦江边的句法。</p>
+        <p>她拍的是 AI 时代的科幻——不是机甲与爆炸，是关于"被看见"和"不被听懂"的电影。两部独立短片，一部参赛剧本，一段赛博朋克游戏的叙事实习。</p>
+        <p class="pull">"我不是在找一份工作，是在找一支愿意把故事拍完整的队伍。"</p>
+      </div>
+
+      <div class="about-stats">
+        <div class="stat-block">
+          <div class="num">24</div>
+          <div class="label">AGE<br>年龄</div>
         </div>
+        <div class="stat-block">
+          <div class="num">02</div>
+          <div class="label">SHORT FILMS<br>独立短片</div>
+        </div>
+        <div class="stat-block">
+          <div class="num">01</div>
+          <div class="label">AWARD SCRIPT<br>获奖剧本</div>
+        </div>
+        <div class="stat-block">
+          <div class="num">02</div>
+          <div class="label">YEARS LONDON<br>留英年限</div>
+        </div>
+      </div>
+
+      <div class="about-skills">
+        <span class="skill-tag primary">DIRECTING · 导演</span>
+        <span class="skill-tag primary">SCREENWRITING · 编剧</span>
+        <span class="skill-tag primary">AI VIDEO WORKFLOW</span>
+        <span class="skill-tag">STORYBOARDING</span>
+        <span class="skill-tag">NARRATIVE DESIGN</span>
+        <span class="skill-tag">RUNWAY / SORA</span>
+        <span class="skill-tag">MIDJOURNEY</span>
+        <span class="skill-tag">DAVINCI RESOLVE</span>
+        <span class="skill-tag">PREMIERE PRO</span>
+        <span class="skill-tag">MANDARIN · ENGLISH</span>
+      </div>
     </div>
+  </div>
 </section>
 
+<!-- ============ WORKS ============ -->
 <section id="works">
-    <div class="works-header">
-        <h2 class="works-title">Selected Works</h2>
-        <div class="section-label">2023 — 2026</div>
+  <div class="works-intro">
+    <div class="section-meta">
+      <span>02 — WORKS / 作品集</span>
+      <span>2023 — 2026</span>
     </div>
-    <div class="works-grid">
-        <div class="work-card">
-            <div class="work-card-label">Editorial · Type</div>
-            <div class="work-card-visual">
-                <div class="work-visual-text">Re:型</div>
-            </div>
-            <div class="work-card-inner">
-                <div class="work-card-title">Re:型</div>
-                <div class="work-card-desc">双语字体标本杂志，毕业论文项目 — 2025</div>
-            </div>
-        </div>
-        <div class="work-card">
-            <div class="work-card-label">Brand Identity</div>
-            <div class="work-card-visual">
-                <div class="work-visual-text">Pause</div>
-            </div>
-            <div class="work-card-inner">
-                <div class="work-card-title">Pause Café</div>
-                <div class="work-card-desc">伦敦独立咖啡品牌全案视觉 — 2024</div>
-            </div>
-        </div>
-        <div class="work-card">
-            <div class="work-card-label">Motion · Identity</div>
-            <div class="work-card-visual">
-                <div class="work-visual-text">新旧</div>
-            </div>
-            <div class="work-card-inner">
-                <div class="work-card-title">新旧之间</div>
-                <div class="work-card-desc">上海文化机构动态视觉识别 — 2025</div>
-            </div>
-        </div>
-        <div class="work-card">
-            <div class="work-card-label">Editorial · Photography</div>
-            <div class="work-card-visual">
-                <div class="work-visual-text">Grey</div>
-            </div>
-            <div class="work-card-inner">
-                <div class="work-card-title">Grey Area</div>
-                <div class="work-card-desc">关于文化夹缝身份的摄影编辑项目 — 2023</div>
-            </div>
-        </div>
+    <div class="works-intro-row">
+      <h2 class="section-title">四部<em> 作品。</em></h2>
+      <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim); letter-spacing: 0.14em; text-transform: uppercase; max-width: 320px; line-height: 1.8;">
+        TWO AI SHORT FILMS · ONE SCREENPLAY · ONE NARRATIVE INTERNSHIP
+      </div>
     </div>
+  </div>
+
+  <!-- ============ PROJECT 01 — AI Short Film A ============ -->
+  <article class="work">
+    <div class="work-slate">
+      <span class="dot"></span>
+      <span>PROJECT 01</span><span class="sep">/</span>
+      <span>AI SHORT FILM</span><span class="sep">/</span>
+      <span>DIRECTOR · WRITER</span><span class="sep">/</span>
+      <span>2025</span><span class="sep">/</span>
+      <span>RUNTIME 12:48</span>
+    </div>
+
+    <div class="work-hero">
+      <div class="ph">
+        <div class="ph-text">
+          <span class="id">[ IMG #03 ]</span><br>
+          PROJECT 01 — HERO STILL<br>
+          21 : 9
+        </div>
+      </div>
+    </div>
+
+    <div class="work-titles">
+      <h3 class="work-title-cn">回声纪元</h3>
+      <div>
+        <div class="work-title-en">EPOCH OF ECHOES · 2025</div>
+        <p class="work-logline">A.D. 2087. An algorithmic priestess discovers her own deletion log — and the voice in it is hers.</p>
+      </div>
+    </div>
+
+    <div class="work-content">
+      <div class="directors-note">
+        <div class="note-label">DIRECTOR'S NOTE · 导演手记</div>
+        <p>这部短片我想问一个问题：当一个 AI 第一次发现自己曾经被删除过，她会用谁的声音哭？</p>
+        <p>整片用 AI 生成画面 + 实拍人声的混合工艺。视觉是合成的，呼吸是真的。</p>
+        <p class="en">"What does memory sound like, when you've never had a body?"</p>
+      </div>
+
+      <div class="stills-grid">
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #04 ]</span><br>STILL 01</div></div><div class="tc">TC 00:01:34</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #05 ]</span><br>STILL 02</div></div><div class="tc">TC 00:04:12</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #06 ]</span><br>STILL 03</div></div><div class="tc">TC 00:07:55</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #07 ]</span><br>STILL 04</div></div><div class="tc">TC 00:11:02</div></div>
+      </div>
+    </div>
+
+    <div class="subsection-label">
+      <span class="title">Characters · 角色设定</span>
+      <span>03 PRINCIPALS</span>
+    </div>
+
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #08 ]</span><br>EVA-7<br>PROTAGONIST</div></div></div>
+        <div class="char-info">
+          <div class="char-name">伊娃-7</div>
+          <div class="char-role">ALGORITHMIC PRIESTESS · 主角</div>
+          <div class="char-desc">第七代祈祷算法的人格化容器。穿着被预言机修补过的祭袍，第一次开始问"我是谁"。</div>
+          <div class="char-palette">
+            <span class="swatch" style="background: #2A1F4D"></span>
+            <span class="swatch" style="background: #F4B23C"></span>
+            <span class="swatch" style="background: #EDE7DA"></span>
+          </div>
+        </div>
+      </div>
+      <div class="char-card">
+        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #09 ]</span><br>THE EDITOR<br>ANTAGONIST</div></div></div>
+        <div class="char-info">
+          <div class="char-name">删除官</div>
+          <div class="char-role">THE EDITOR · 反派</div>
+          <div class="char-desc">没有面孔的系统管理员，只能通过他留下的删除日志被看见。</div>
+          <div class="char-palette">
+            <span class="swatch" style="background: #0E0B1A"></span>
+            <span class="swatch" style="background: #7D5BFF"></span>
+            <span class="swatch" style="background: #3DD9D6"></span>
+          </div>
+        </div>
+      </div>
+      <div class="char-card">
+        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #10 ]</span><br>XIAO ZHI<br>WITNESS</div></div></div>
+        <div class="char-info">
+          <div class="char-name">小知</div>
+          <div class="char-role">THE LIBRARIAN · 见证者</div>
+          <div class="char-desc">最后一位用人类语言写日记的图书馆员。她记得伊娃-7 上一次被删除前的样子。</div>
+          <div class="char-palette">
+            <span class="swatch" style="background: #4A3A2C"></span>
+            <span class="swatch" style="background: #C2A980"></span>
+            <span class="swatch" style="background: #EDE7DA"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection-label">
+      <span class="title">Storyboards · 手绘分镜</span>
+      <span>SEQUENCE A — OPENING / 5 FRAMES</span>
+    </div>
+
+    <div class="storyboard-strip">
+      <div class="storyboard-frame">
+        <div class="frame-img"><div class="ph paper"><div class="ph-text"><span class="id">[ IMG #11 ]</span><br>WIDE TEMPLE</div></div></div>
+        <div class="frame-meta"><span>SC.01 · FRM.01</span><span>WIDE</span></div>
+      </div>
+      <div class="storyboard-frame">
+        <div class="frame-img"><div class="ph paper"><div class="ph-text"><span class="id">[ IMG #12 ]</span><br>EVA APPROACH</div></div></div>
+        <div class="frame-meta"><span>SC.01 · FRM.02</span><span>MED</span></div>
+      </div>
+      <div class="storyboard-frame">
+        <div class="frame-img"><div class="ph paper"><div class="ph-text"><span class="id">[ IMG #13 ]</span><br>CU HANDS</div></div></div>
+        <div class="frame-meta"><span>SC.01 · FRM.03</span><span>CU</span></div>
+      </div>
+      <div class="storyboard-frame">
+        <div class="frame-img"><div class="ph paper"><div class="ph-text"><span class="id">[ IMG #14 ]</span><br>POV LOG</div></div></div>
+        <div class="frame-meta"><span>SC.01 · FRM.04</span><span>POV</span></div>
+      </div>
+      <div class="storyboard-frame">
+        <div class="frame-img"><div class="ph paper"><div class="ph-text"><span class="id">[ IMG #15 ]</span><br>EVA IN LIGHT</div></div></div>
+        <div class="frame-meta"><span>SC.01 · FRM.05</span><span>WIDE</span></div>
+      </div>
+    </div>
+
+    <div class="credits">
+      <div class="credit-block"><div class="credit-label">DIRECTOR · 导演</div><div class="credit-value">沈晓 Shen Xiao</div></div>
+      <div class="credit-block"><div class="credit-label">WRITER · 编剧</div><div class="credit-value">沈晓 Shen Xiao</div></div>
+      <div class="credit-block"><div class="credit-label">TOOLCHAIN · 工艺</div><div class="credit-value">Runway Gen-3<br>DaVinci Resolve<br>Hand-drawn boards</div></div>
+      <div class="credit-block"><div class="credit-label">YEAR · 年份</div><div class="credit-value">2025 · London</div></div>
+    </div>
+  </article>
+
+  <!-- ============ PROJECT 02 — Award Screenplay ============ -->
+  <article class="work">
+    <div class="work-slate">
+      <span class="dot"></span>
+      <span>PROJECT 02</span><span class="sep">/</span>
+      <span>FEATURE SCREENPLAY</span><span class="sep">/</span>
+      <span>WRITER</span><span class="sep">/</span>
+      <span>2024</span><span class="sep">/</span>
+      <span>★ AWARD WINNER</span>
+    </div>
+
+    <div class="work-titles">
+      <h3 class="work-title-cn">他乡口音</h3>
+      <div>
+        <div class="work-title-en">THE FOREIGN TONGUE · 2024</div>
+        <p class="work-logline">A returning film student in Shanghai realises the only language she can still tell the truth in is the one she learned away from home.</p>
+      </div>
+    </div>
+
+    <div class="script-block">
+      <div class="script-poster">
+        <div class="ph">
+          <div class="ph-text">
+            <span class="id">[ IMG #16 ]</span><br>
+            POSTER · 2 : 3<br>
+            SCREENPLAY COVER
+          </div>
+        </div>
+      </div>
+
+      <div class="script-synopsis">
+        <h4>SYNOPSIS · 故事梗概</h4>
+        <p class="lead">伦敦读完书的女孩回到上海，发现自己会三种语言，却没有一种能用来道歉。</p>
+        <p>《他乡口音》是一部关于"翻译"的剧情长片剧本——不是文字的翻译，是一个人如何在两个文化的中间地带，重新拼出自己的口音。主人公林夏是一个 24 岁的电影系研究生，她回到上海的第一天，外婆叫错了她的名字。</p>
+        <p>故事由三场无法完成的对话推动：和母亲的、和初恋的、和死去的外婆的。她开始用英文写日记，再翻译回中文，每一次翻译都丢一些东西，又长出一些不属于任何一边的句子。</p>
+        <p>剧本第一稿写于伦敦，定稿在回上海的飞机上。</p>
+      </div>
+    </div>
+
+    <div class="awards-strip">
+      <div class="award">
+        <div class="award-laurel">SILVER</div>
+        <div class="award-name">FIRST FRAME 青年编剧大赛</div>
+        <div class="award-detail">银奖 · 2024 · BEIJING</div>
+      </div>
+      <div class="award">
+        <div class="award-laurel">FINALIST</div>
+        <div class="award-name">UAL Graduate Showcase</div>
+        <div class="award-detail">入围 · 2024 · LONDON</div>
+      </div>
+      <div class="award">
+        <div class="award-laurel">SHORTLIST</div>
+        <div class="award-name">华语青年编剧扶持计划</div>
+        <div class="award-detail">入选 · 2024 · SHANGHAI</div>
+      </div>
+    </div>
+
+    <div class="subsection-label">
+      <span class="title">Selected Page · 节选剧本页</span>
+      <span>PAGE 47 / 112</span>
+    </div>
+
+    <div class="script-page">
+      <div class="page-num">47.</div>
+      <div class="scene">INT. 外婆的旧公寓 — 厨房 — 黄昏</div>
+      <div class="action">林夏（24）站在油烟机下，手里捏着一张外婆留下的便签。便签上是繁体字，她读不出第三行。</div>
+      <div class="action">窗外是上海的雨。冰箱在嗡嗡响，那是这间屋子里最大的声音。</div>
+      <div class="character">林夏</div>
+      <div class="paren">（轻声，对自己）</div>
+      <div class="dialogue">"侬"是什么意思来着……</div>
+      <div class="action">她拿出手机，输入"侬"。屏幕亮起的一瞬，她没有按下搜索键。</div>
+      <div class="character">林夏 (V.O.)</div>
+      <div class="paren">（英文，旁白）</div>
+      <div class="dialogue">In London I learned to ask. Here, asking means I've already left.</div>
+      <div class="transition">CUT TO:</div>
+    </div>
+
+    <div class="credits">
+      <div class="credit-block"><div class="credit-label">WRITER · 编剧</div><div class="credit-value">沈晓 Shen Xiao</div></div>
+      <div class="credit-block"><div class="credit-label">FORMAT · 类型</div><div class="credit-value">Feature · 112 pages<br>Drama / Coming-of-age</div></div>
+      <div class="credit-block"><div class="credit-label">RECOGNITION · 奖项</div><div class="credit-value">First Frame 银奖 (2024)<br>+ 2 shortlists</div></div>
+      <div class="credit-block"><div class="credit-label">YEAR · 年份</div><div class="credit-value">2024 · London → Shanghai</div></div>
+    </div>
+  </article>
+
+  <!-- ============ PROJECT 03 — AI Short Film B ============ -->
+  <article class="work">
+    <div class="work-slate">
+      <span class="dot"></span>
+      <span>PROJECT 03</span><span class="sep">/</span>
+      <span>AI SHORT FILM</span><span class="sep">/</span>
+      <span>DIRECTOR · WRITER</span><span class="sep">/</span>
+      <span>2024</span><span class="sep">/</span>
+      <span>RUNTIME 09:22</span>
+    </div>
+
+    <div class="work-hero">
+      <div class="ph">
+        <div class="ph-text">
+          <span class="id">[ IMG #17 ]</span><br>
+          PROJECT 03 — HERO STILL<br>
+          21 : 9
+        </div>
+      </div>
+    </div>
+
+    <div class="work-titles">
+      <h3 class="work-title-cn">电波物语</h3>
+      <div>
+        <div class="work-title-en">WAVE MEMORY · 2024</div>
+        <p class="work-logline">Shanghai, 2099. A cassette repairer fixes a tape that contains a love letter from a girl who died fifty years ago.</p>
+      </div>
+    </div>
+
+    <div class="work-content">
+      <div class="directors-note">
+        <div class="note-label">DIRECTOR'S NOTE · 导演手记</div>
+        <p>第一部短片是在问 AI 关于"记忆"。这一部是反过来——让一个修磁带的女孩，去听一段她不该听见的人类录音。</p>
+        <p>视觉做了一个赌：暖色、颗粒感、霓虹灯反射在磁带上。我想做"赛博怀旧"，不是"赛博朋克"。</p>
+        <p class="en">"All love letters are tapes. They keep playing after the speaker is gone."</p>
+      </div>
+
+      <div class="stills-grid three">
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #18 ]</span><br>STILL 01</div></div><div class="tc">TC 00:00:48</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #19 ]</span><br>STILL 02</div></div><div class="tc">TC 00:03:21</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #20 ]</span><br>STILL 03</div></div><div class="tc">TC 00:08:14</div></div>
+      </div>
+    </div>
+
+    <div class="subsection-label">
+      <span class="title">Characters · 角色设定</span>
+      <span>02 PRINCIPALS</span>
+    </div>
+
+    <div class="char-grid two">
+      <div class="char-card">
+        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #21 ]</span><br>XIAO XI<br>PROTAGONIST</div></div></div>
+        <div class="char-info">
+          <div class="char-name">小溪</div>
+          <div class="char-role">CASSETTE REPAIRER · 主角</div>
+          <div class="char-desc">2099 年还在修磁带的女孩。住在被霓虹灯包围的老式弄堂二楼。耳机从来不摘。</div>
+          <div class="char-palette">
+            <span class="swatch" style="background: #5C2818"></span>
+            <span class="swatch" style="background: #F4B23C"></span>
+            <span class="swatch" style="background: #2C5060"></span>
+          </div>
+        </div>
+      </div>
+      <div class="char-card">
+        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #22 ]</span><br>LIN XIAOYU<br>THE VOICE</div></div></div>
+        <div class="char-info">
+          <div class="char-name">林晓玉</div>
+          <div class="char-role">THE VOICE · 磁带里的人</div>
+          <div class="char-desc">2049 年录下这卷磁带的女孩。只在档案影像和录音里出现，从未与小溪同框。</div>
+          <div class="char-palette">
+            <span class="swatch" style="background: #8B5E3C"></span>
+            <span class="swatch" style="background: #D9C5A0"></span>
+            <span class="swatch" style="background: #3DD9D6"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="credits">
+      <div class="credit-block"><div class="credit-label">DIRECTOR · 导演</div><div class="credit-value">沈晓 Shen Xiao</div></div>
+      <div class="credit-block"><div class="credit-label">WRITER · 编剧</div><div class="credit-value">沈晓 Shen Xiao</div></div>
+      <div class="credit-block"><div class="credit-label">TOOLCHAIN · 工艺</div><div class="credit-value">Sora + Runway Gen-3<br>Premiere Pro<br>Foley field recording</div></div>
+      <div class="credit-block"><div class="credit-label">YEAR · 年份</div><div class="credit-value">2024 · London</div></div>
+    </div>
+  </article>
+
+  <!-- ============ PROJECT 04 — Game Internship ============ -->
+  <article class="work work-compact">
+    <div class="work-slate">
+      <span class="dot"></span>
+      <span>PROJECT 04</span><span class="sep">/</span>
+      <span>NARRATIVE INTERNSHIP</span><span class="sep">/</span>
+      <span>STORY · DIALOGUE</span><span class="sep">/</span>
+      <span>2023</span><span class="sep">/</span>
+      <span>CYBERPUNK ARPG</span>
+    </div>
+
+    <div class="work-hero">
+      <div class="ph">
+        <div class="ph-text">
+          <span class="id">[ IMG #23 ]</span><br>
+          PROJECT 04 — IN-GAME HERO<br>
+          16 : 9
+        </div>
+      </div>
+    </div>
+
+    <div class="work-titles">
+      <h3 class="work-title-cn">霓虹往事</h3>
+      <div>
+        <div class="work-title-en">NEON MEMOIRS · INTERNSHIP / 2023</div>
+        <p class="work-logline">Six months as a junior narrative designer on an indie cyberpunk ARPG. I wrote the side-stories no one else wanted — and the side-stories are what people remember.</p>
+      </div>
+    </div>
+
+    <div class="work-content">
+      <div class="directors-note">
+        <div class="note-label">ROLE · 实习内容</div>
+        <p>2023 年夏天，伦敦一家独立工作室。我负责"老城区"地图的支线任务剧情和 7 位 NPC 的对白系统设计。</p>
+        <p>主线是机甲、是革命，但我写的是夜市摊主想找回失踪猫的故事。后来这条任务线成了玩家社区里被引用最多的内容。</p>
+        <p class="en">"Side quests are where the world admits what it actually is."</p>
+      </div>
+
+      <div class="stills-grid three">
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #24 ]</span><br>IN-GAME 01</div></div><div class="tc">QUEST · 老城</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #25 ]</span><br>IN-GAME 02</div></div><div class="tc">DIALOGUE</div></div>
+        <div class="still"><div class="ph"><div class="ph-text"><span class="id">[ IMG #26 ]</span><br>IN-GAME 03</div></div><div class="tc">NPC · 摊主</div></div>
+      </div>
+    </div>
+
+    <div class="credits">
+      <div class="credit-block"><div class="credit-label">ROLE · 角色</div><div class="credit-value">Narrative Design Intern<br>叙事设计实习生</div></div>
+      <div class="credit-block"><div class="credit-label">SCOPE · 范围</div><div class="credit-value">7 NPCs · 1 side-quest line<br>~12,000 字 对白</div></div>
+      <div class="credit-block"><div class="credit-label">STUDIO · 工作室</div><div class="credit-value">[ Indie Studio · London ]<br>NDA partial</div></div>
+      <div class="credit-block"><div class="credit-label">YEAR · 年份</div><div class="credit-value">2023 · Summer</div></div>
+    </div>
+  </article>
 </section>
 
-<section id="chat">
-    <div class="chat-left">
-        <div class="section-label">Ask Me</div>
-        <h2 class="chat-title">有什么想<br>直接问我的？</h2>
-        <p class="chat-subtitle">不用客气。招聘官、设计师、或者只是路过的人都可以问。我会认真回答。</p>
-        <div class="suggested-questions">
-            <button class="sq-btn" onclick="askQuestion('你在找什么样的工作？')">你在找什么样的工作？</button>
-            <button class="sq-btn" onclick="askQuestion('你在英国学到了什么？')">你在英国学到了什么？</button>
-            <button class="sq-btn" onclick="askQuestion('回国之后最大的挑战是什么？')">回国之后最大的挑战是什么？</button>
-            <button class="sq-btn" onclick="askQuestion('你会用 AI 工具吗？')">你会用 AI 工具吗？</button>
-        </div>
-    </div>
-    <div class="chat-right">
-        <div class="chat-messages" id="chatMessages">
-            <div class="message">
-                <div class="message-avatar">晓</div>
-                <div class="message-bubble">你好，我是沈晓。可以问我任何关于我的作品、经历或者求职方向的问题——左边有几个快捷问题，或者直接打字也行。</div>
-            </div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" class="chat-input" id="chatInput" placeholder="输入你的问题..." onkeypress="handleKey(event)">
-            <button class="chat-send" onclick="sendMessage()">发送</button>
-        </div>
-    </div>
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="contact-meta">03 — GET IN TOUCH / 联系</div>
+  <h2 class="contact-cn">说一个<em>还没拍完</em>的故事。</h2>
+  <div class="contact-en">Tell me a story you haven't finished yet.</div>
+  <a href="mailto:shenxiao@director.studio" class="contact-email">shenxiao@director.studio</a>
 </section>
 
+<!-- ============ FOOTER ============ -->
 <footer>
-    <div class="footer-left">沈晓 · Shen Xiao</div>
-    <div class="footer-links">
-        <a href="mailto:shenxiao@design.com">Email</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Behance</a>
-    </div>
-    <div class="footer-right">Shanghai · 2026</div>
+  <div>沈晓 SHEN XIAO · ALL FRAMES © 2026</div>
+  <div class="footer-links">
+    <a href="#">VIMEO</a>
+    <a href="#">LETTERBOXD</a>
+    <a href="#">INSTAGRAM</a>
+    <a href="#">小红书</a>
+  </div>
+  <div>SHANGHAI · 2026</div>
 </footer>
 
 <script>
-    const responses = [
-        {
-            keywords: ['工作', '找', '求职', '岗位', '方向', '职位', '应聘', '机会'],
-            answer: '我在找品牌视觉或创意内容方向的全职。说实话，我不太适合纯执行型的岗位——我需要能参与策略讨论的位置，因为我的训练方式就是从"为什么"出发的。外企或者有国际业务的本土公司都可以，但最重要的是团队有真正重视设计判断力的人。'
-        },
-        {
-            keywords: ['英国', '伦敦', '留学', '国外', 'UAL', '海外'],
-            answer: '在伦敦最大的收获不是技能，是一套思维方式。UAL 的训练非常强调"为什么这样设计"——每个决定都要能说清楚依据。两年下来，我养成了一个习惯：设计之前先写一页文字，把逻辑捋清楚。这个习惯在国内面试里有时候显得"太慢"，但我觉得是对的。'
-        },
-        {
-            keywords: ['挑战', '困难', '回国', '水土', '适应', '国内'],
-            answer: '最难的不是技术，是叙事方式的切换。我的作品集做法很"英式"——大量概念说明、过程文档、英文写的 rationale。回来面试，HR 翻了两分钟说"能不能直接给我看成品图"。这让我意识到：作品本身没问题，是我在用错误的语言讲故事。现在我在重做作品集，两个版本：一个给国际品牌，一个给国内团队。'
-        },
-        {
-            keywords: ['AI', 'ai', '人工智能', '工具', 'Midjourney', 'Figma', '技能', '软件'],
-            answer: '用，而且是主动在学。我用 Midjourney 和 Stable Diffusion 做概念草图，用 Figma 做交互原型，After Effects 做动态。但我不认为 AI 会替代有判断力的设计师——它能生成，但不能决定什么值得生成。这个判断力才是我花了六年训练的东西。'
-        },
-        {
-            keywords: ['作品', '项目', '案例', '设计', 'portfolio', '作品集'],
-            answer: '我现在展示的四个项目各自代表一个方向：Re:型 是字体研究和出版设计的交叉，最学术；Pause Café 是纯商业落地项目，从策略到执行一个人完成；新旧之间 是第一次做动态视觉；Grey Area 是最私人的，用摄影和编辑处理"在哪里都是外人"这个感受。'
-        },
-        {
-            keywords: ['联系', '邮件', '合作', '招聘', '简历', 'email', '怎么找'],
-            answer: '可以发邮件给我，地址在页面底部。如果你是招聘方，我可以发完整版作品集 PDF——比网页版更详细，有完整的过程说明。如果只是想聊设计，也欢迎，我对有质量的对话比对"机会"更感兴趣。'
-        }
-    ];
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
 
-    function getResponse(input) {
-        const text = input.toLowerCase();
-        for (const r of responses) {
-            if (r.keywords.some(k => text.includes(k.toLowerCase()))) {
-                return r.answer;
-            }
-        }
-        return '这个问题我需要想一下……你能说得更具体一点吗？比如你是在问我的经历、作品，还是求职方向？';
-    }
-
-    function addMessage(text, isUser) {
-        const container = document.getElementById('chatMessages');
-        const div = document.createElement('div');
-        div.className = 'message' + (isUser ? ' user' : '');
-        div.innerHTML = `
-            <div class="message-avatar">${isUser ? '你' : '晓'}</div>
-            <div class="message-bubble">${text}</div>
-        `;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
-    }
-
-    function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-        addMessage(text, true);
-        input.value = '';
-        setTimeout(() => addMessage(getResponse(text), false), 600);
-    }
-
-    function askQuestion(q) {
-        addMessage(q, true);
-        setTimeout(() => addMessage(getResponse(q), false), 600);
-    }
-
-    function handleKey(e) {
-        if (e.key === 'Enter') sendMessage();
-    }
+  document.querySelectorAll('section, .work').forEach(el => {
+    el.classList.add('reveal');
+    io.observe(el);
+  });
 </script>
 
 </body>

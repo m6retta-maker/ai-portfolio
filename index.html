@@ -1004,7 +1004,7 @@ footer {
   <div class="hero-stack">
     <div class="hero-line solid">SHEN</div>
     <div class="hero-portrait">
-      <img src="images/portrait-director.png" alt="Shen Xiao — Director Portrait" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
     </div>
     <div class="hero-line outline">XIAO</div>
     <div class="hero-cn-name">沈晓</div>
@@ -1340,40 +1340,6 @@ footer {
       </div>
     </div>
 
-    <div class="subsection-label">
-      <span class="title">Characters · 角色设定</span>
-      <span>02 PRINCIPALS</span>
-    </div>
-
-    <div class="char-grid two">
-      <div class="char-card">
-        <div class="char-image" style="overflow:hidden;"><img src="images/p03-char-xiaoxi.png" alt="小溪 — Cassette Repairer" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"></div>
-        <div class="char-info">
-          <div class="char-name">小溪</div>
-          <div class="char-role">CASSETTE REPAIRER · 主角</div>
-          <div class="char-desc">2099 年还在修磁带的女孩。住在被霓虹灯包围的老式弄堂二楼。耳机从来不摘。</div>
-          <div class="char-palette">
-            <span class="swatch" style="background: #5C2818"></span>
-            <span class="swatch" style="background: #F4B23C"></span>
-            <span class="swatch" style="background: #2C5060"></span>
-          </div>
-        </div>
-      </div>
-      <div class="char-card">
-        <div class="char-image"><div class="ph"><div class="ph-text"><span class="id">[ IMG #22 ]</span><br>LIN XIAOYU<br>THE VOICE</div></div></div>
-        <div class="char-info">
-          <div class="char-name">林晓玉</div>
-          <div class="char-role">THE VOICE · 磁带里的人</div>
-          <div class="char-desc">2049 年录下这卷磁带的女孩。只在档案影像和录音里出现，从未与小溪同框。</div>
-          <div class="char-palette">
-            <span class="swatch" style="background: #8B5E3C"></span>
-            <span class="swatch" style="background: #D9C5A0"></span>
-            <span class="swatch" style="background: #3DD9D6"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="credits">
       <div class="credit-block"><div class="credit-label">DIRECTOR · 导演</div><div class="credit-value">沈晓 Shen Xiao</div></div>
       <div class="credit-block"><div class="credit-label">WRITER · 编剧</div><div class="credit-value">沈晓 Shen Xiao</div></div>
@@ -1382,7 +1348,6 @@ footer {
     </div>
   </article>
 
-  </article>
 </section>
 
 <!-- ============ CONTACT ============ -->
@@ -1414,6 +1379,137 @@ footer {
     el.classList.add('reveal');
     io.observe(el);
   });
+
+  // ============ HERO CANVAS — SCI-FI ANIMATION ============
+  (function () {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = canvas.offsetWidth;
+      H = canvas.offsetHeight;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const ACCENT = '#F4B23C';
+    const CYAN   = '#3DD9D6';
+
+    const pts = Array.from({ length: 52 }, () => ({
+      x:  Math.random(),
+      y:  Math.random(),
+      vx: (Math.random() - 0.5) * 0.00022,
+      vy: (Math.random() - 0.5) * 0.00022,
+      r:  Math.random() * 1.6 + 0.4,
+      col: Math.random() < 0.25 ? ACCENT : CYAN,
+    }));
+
+    let scanY = 0, frame = 0;
+
+    function draw() {
+      frame++;
+      ctx.clearRect(0, 0, W, H);
+
+      // Grid
+      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = 'rgba(61,217,214,0.07)';
+      const gs = 36;
+      for (let x = 0; x <= W; x += gs) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+      for (let y = 0; y <= H; y += gs) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+
+      // Central glow ring
+      const cx = W * 0.5, cy = H * 0.44;
+      const pulse = 1 + 0.055 * Math.sin(frame * 0.022);
+      const rOuter = Math.min(W, H) * 0.24 * pulse;
+
+      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, rOuter * 1.4);
+      grd.addColorStop(0,    'rgba(244,178,60,0.10)');
+      grd.addColorStop(0.45, 'rgba(125,91,255,0.07)');
+      grd.addColorStop(1,    'transparent');
+      ctx.beginPath(); ctx.arc(cx, cy, rOuter * 1.4, 0, Math.PI * 2);
+      ctx.fillStyle = grd; ctx.fill();
+
+      ctx.beginPath(); ctx.arc(cx, cy, rOuter, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(244,178,60,${0.38 + 0.18 * Math.sin(frame * 0.022)})`;
+      ctx.lineWidth = 1.2; ctx.stroke();
+
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(frame * 0.009);
+      ctx.setLineDash([5, 12]);
+      ctx.beginPath(); ctx.arc(0, 0, rOuter * 1.22, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(61,217,214,0.28)'; ctx.lineWidth = 0.8; ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+
+      ctx.save(); ctx.translate(cx, cy); ctx.rotate(-frame * 0.005);
+      ctx.setLineDash([3, 22]);
+      ctx.beginPath(); ctx.arc(0, 0, rOuter * 1.38, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(125,91,255,0.20)'; ctx.lineWidth = 0.7; ctx.stroke();
+      ctx.setLineDash([]); ctx.restore();
+
+      ctx.shadowColor = ACCENT; ctx.shadowBlur = 12;
+      ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = ACCENT; ctx.fill(); ctx.shadowBlur = 0;
+
+      // Particle connections
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = (pts[i].x - pts[j].x) * W;
+          const dy = (pts[i].y - pts[j].y) * H;
+          const d  = Math.sqrt(dx*dx + dy*dy);
+          if (d < 88) {
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x * W, pts[i].y * H);
+            ctx.lineTo(pts[j].x * W, pts[j].y * H);
+            ctx.strokeStyle = `rgba(61,217,214,${0.22 * (1 - d / 88)})`;
+            ctx.lineWidth = 0.5; ctx.stroke();
+          }
+        }
+      }
+
+      // Particles
+      for (const p of pts) {
+        ctx.shadowColor = p.col; ctx.shadowBlur = 7;
+        ctx.beginPath(); ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.col; ctx.fill(); ctx.shadowBlur = 0;
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > 1) p.vx *= -1;
+        if (p.y < 0 || p.y > 1) p.vy *= -1;
+      }
+
+      // Scan line
+      scanY = (scanY + 0.35) % H;
+      const sg = ctx.createLinearGradient(0, scanY - 18, 0, scanY + 18);
+      sg.addColorStop(0, 'transparent');
+      sg.addColorStop(0.5, 'rgba(61,217,214,0.10)');
+      sg.addColorStop(1, 'transparent');
+      ctx.fillStyle = sg; ctx.fillRect(0, scanY - 18, W, 36);
+
+      // Corner brackets
+      const B = 16;
+      ctx.strokeStyle = 'rgba(244,178,60,0.55)'; ctx.lineWidth = 1.5;
+      [[12,12,1,1],[W-12,12,-1,1],[12,H-12,1,-1],[W-12,H-12,-1,-1]].forEach(([x,y,sx,sy]) => {
+        ctx.beginPath(); ctx.moveTo(x+sx*B,y); ctx.lineTo(x,y); ctx.lineTo(x,y+sy*B); ctx.stroke();
+      });
+
+      // HUD labels
+      ctx.font = '8px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(61,217,214,0.45)';
+      ctx.textAlign = 'left';
+      ctx.fillText('SX · 沈晓', 15, H - 16);
+      ctx.fillStyle = 'rgba(237,231,218,0.2)';
+      ctx.textAlign = 'right';
+      ctx.fillText(String(frame % 9999).padStart(4,'0') + ' FRM', W - 15, H - 16);
+      ctx.textAlign = 'left';
+
+      requestAnimationFrame(draw);
+    }
+
+    draw();
+  })();
 </script>
 
 </body>

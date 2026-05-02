@@ -1473,7 +1473,7 @@ footer {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
   }, { threshold: 0.12 });
 
-  document.querySelectorAll('section, .work').forEach(el => {
+  document.querySelectorAll('section').forEach(el => {
     el.classList.add('reveal');
     io.observe(el);
   });

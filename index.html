@@ -109,10 +109,32 @@ nav {
   padding: 110px 48px 60px;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(ellipse 80% 60% at 80% 20%, rgba(125, 91, 255, 0.16), transparent 60%),
-    radial-gradient(ellipse 70% 50% at 20% 90%, rgba(244, 178, 60, 0.08), transparent 55%);
+  background: var(--bg);
   overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(14,11,26,0.55) 0%, rgba(14,11,26,0.05) 30%, rgba(14,11,26,0.80) 100%),
+    linear-gradient(to right, rgba(14,11,26,0.10) 0%, transparent 35%, rgba(14,11,26,0.65) 100%);
 }
 
 .hero-meta-top, .hero-meta-bottom {
@@ -128,10 +150,13 @@ nav {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-stack {
   position: relative;
+  z-index: 2;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -155,7 +180,7 @@ nav {
 
 .hero-line.outline {
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--accent);
+  -webkit-text-stroke: 1.5px var(--ink);
   text-align: right;
   margin-top: -0.08em;
   z-index: 2;
@@ -199,6 +224,8 @@ nav {
   gap: 32px;
   align-items: end;
   margin-top: 24px;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-tagline {
@@ -996,6 +1023,11 @@ footer {
 
 <!-- ============ HERO ============ -->
 <section id="hero">
+  <div class="hero-bg">
+    <img src="images/hero-bg.png" alt="">
+  </div>
+  <div class="hero-overlay"></div>
+
   <div class="hero-meta-top">
     <span>● PORTFOLIO / 2026</span>
     <span>DIRECTOR'S REEL — SELECTED WORKS</span>
@@ -1003,9 +1035,6 @@ footer {
 
   <div class="hero-stack">
     <div class="hero-line solid">SHEN</div>
-    <div class="hero-portrait">
-      <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
-    </div>
     <div class="hero-line outline">XIAO</div>
     <div class="hero-cn-name">沈晓</div>
   </div>
@@ -1380,136 +1409,6 @@ footer {
     io.observe(el);
   });
 
-  // ============ HERO CANVAS — SCI-FI ANIMATION ============
-  (function () {
-    const canvas = document.getElementById('hero-canvas');
-    const ctx = canvas.getContext('2d');
-    let W, H;
-
-    function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = canvas.offsetWidth;
-      H = canvas.offsetHeight;
-      canvas.width  = W * dpr;
-      canvas.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    const ACCENT = '#F4B23C';
-    const CYAN   = '#3DD9D6';
-
-    const pts = Array.from({ length: 52 }, () => ({
-      x:  Math.random(),
-      y:  Math.random(),
-      vx: (Math.random() - 0.5) * 0.00022,
-      vy: (Math.random() - 0.5) * 0.00022,
-      r:  Math.random() * 1.6 + 0.4,
-      col: Math.random() < 0.25 ? ACCENT : CYAN,
-    }));
-
-    let scanY = 0, frame = 0;
-
-    function draw() {
-      frame++;
-      ctx.clearRect(0, 0, W, H);
-
-      // Grid
-      ctx.lineWidth = 0.5;
-      ctx.strokeStyle = 'rgba(61,217,214,0.07)';
-      const gs = 36;
-      for (let x = 0; x <= W; x += gs) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-      for (let y = 0; y <= H; y += gs) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-
-      // Central glow ring
-      const cx = W * 0.5, cy = H * 0.44;
-      const pulse = 1 + 0.055 * Math.sin(frame * 0.022);
-      const rOuter = Math.min(W, H) * 0.24 * pulse;
-
-      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, rOuter * 1.4);
-      grd.addColorStop(0,    'rgba(244,178,60,0.10)');
-      grd.addColorStop(0.45, 'rgba(125,91,255,0.07)');
-      grd.addColorStop(1,    'transparent');
-      ctx.beginPath(); ctx.arc(cx, cy, rOuter * 1.4, 0, Math.PI * 2);
-      ctx.fillStyle = grd; ctx.fill();
-
-      ctx.beginPath(); ctx.arc(cx, cy, rOuter, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(244,178,60,${0.38 + 0.18 * Math.sin(frame * 0.022)})`;
-      ctx.lineWidth = 1.2; ctx.stroke();
-
-      ctx.save(); ctx.translate(cx, cy); ctx.rotate(frame * 0.009);
-      ctx.setLineDash([5, 12]);
-      ctx.beginPath(); ctx.arc(0, 0, rOuter * 1.22, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(61,217,214,0.28)'; ctx.lineWidth = 0.8; ctx.stroke();
-      ctx.setLineDash([]); ctx.restore();
-
-      ctx.save(); ctx.translate(cx, cy); ctx.rotate(-frame * 0.005);
-      ctx.setLineDash([3, 22]);
-      ctx.beginPath(); ctx.arc(0, 0, rOuter * 1.38, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(125,91,255,0.20)'; ctx.lineWidth = 0.7; ctx.stroke();
-      ctx.setLineDash([]); ctx.restore();
-
-      ctx.shadowColor = ACCENT; ctx.shadowBlur = 12;
-      ctx.beginPath(); ctx.arc(cx, cy, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = ACCENT; ctx.fill(); ctx.shadowBlur = 0;
-
-      // Particle connections
-      for (let i = 0; i < pts.length; i++) {
-        for (let j = i + 1; j < pts.length; j++) {
-          const dx = (pts[i].x - pts[j].x) * W;
-          const dy = (pts[i].y - pts[j].y) * H;
-          const d  = Math.sqrt(dx*dx + dy*dy);
-          if (d < 88) {
-            ctx.beginPath();
-            ctx.moveTo(pts[i].x * W, pts[i].y * H);
-            ctx.lineTo(pts[j].x * W, pts[j].y * H);
-            ctx.strokeStyle = `rgba(61,217,214,${0.22 * (1 - d / 88)})`;
-            ctx.lineWidth = 0.5; ctx.stroke();
-          }
-        }
-      }
-
-      // Particles
-      for (const p of pts) {
-        ctx.shadowColor = p.col; ctx.shadowBlur = 7;
-        ctx.beginPath(); ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.col; ctx.fill(); ctx.shadowBlur = 0;
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > 1) p.vx *= -1;
-        if (p.y < 0 || p.y > 1) p.vy *= -1;
-      }
-
-      // Scan line
-      scanY = (scanY + 0.35) % H;
-      const sg = ctx.createLinearGradient(0, scanY - 18, 0, scanY + 18);
-      sg.addColorStop(0, 'transparent');
-      sg.addColorStop(0.5, 'rgba(61,217,214,0.10)');
-      sg.addColorStop(1, 'transparent');
-      ctx.fillStyle = sg; ctx.fillRect(0, scanY - 18, W, 36);
-
-      // Corner brackets
-      const B = 16;
-      ctx.strokeStyle = 'rgba(244,178,60,0.55)'; ctx.lineWidth = 1.5;
-      [[12,12,1,1],[W-12,12,-1,1],[12,H-12,1,-1],[W-12,H-12,-1,-1]].forEach(([x,y,sx,sy]) => {
-        ctx.beginPath(); ctx.moveTo(x+sx*B,y); ctx.lineTo(x,y); ctx.lineTo(x,y+sy*B); ctx.stroke();
-      });
-
-      // HUD labels
-      ctx.font = '8px "JetBrains Mono", monospace';
-      ctx.fillStyle = 'rgba(61,217,214,0.45)';
-      ctx.textAlign = 'left';
-      ctx.fillText('SX · 沈晓', 15, H - 16);
-      ctx.fillStyle = 'rgba(237,231,218,0.2)';
-      ctx.textAlign = 'right';
-      ctx.fillText(String(frame % 9999).padStart(4,'0') + ' FRM', W - 15, H - 16);
-      ctx.textAlign = 'left';
-
-      requestAnimationFrame(draw);
-    }
-
-    draw();
-  })();
 </script>
 
 </body>
